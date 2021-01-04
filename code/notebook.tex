@@ -1,0 +1,1828 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for grffile with XeLaTeX
+    \def\Gread@@xetex#1{%
+      \IfFileExists{"\Gin@base".bb}%
+      {\Gread@eps{\Gin@base.bb}}%
+      {\Gread@@xetex@aux#1}%
+    }
+    \makeatother
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{ }
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        \ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    TIPOLOGÍA Y CICLO DE VIDA DE LOS DATOS
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+PRÁCTICA 2: Limpieza y análisis de datos
+
+Integrantes: Jaime Gimeno Ferrer- Reynel López Lantigua
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Importación de librerias a usar}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{model\PYZus{}selection} \PY{k+kn}{import} \PY{n}{StratifiedKFold}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{feature\PYZus{}selection} \PY{k+kn}{import} \PY{n}{SelectKBest}\PY{p}{,} \PY{n}{f\PYZus{}classif}\PY{p}{,} \PY{n}{RFE}\PY{p}{,} \PY{n}{RFECV}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{ensemble} \PY{k+kn}{import} \PY{n}{RandomForestClassifier}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{impute} \PY{k+kn}{import} \PY{n}{KNNImputer}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+\end{Verbatim}
+\end{tcolorbox}
+
+    Tabla de contenido{}
+
+{{1~~}Detalles de la actividad}
+
+{{1.1~~}Descripción}
+
+{{1.2~~}Objetivos}
+
+{{1.3~~}Competencias}
+
+{{2~~}Descripción del dataset}
+
+{{3~~}Importancia y objetivos del dataset}
+
+{{3.1~~}Integración y selección de los datos de interés a analizar.}
+
+{{4~~}Limpieza de los datos}
+
+{{4.1~~}Valores nulos}
+
+{{4.2~~}Valores extremos}
+
+{{4.3~~}Dummies y guardado del dataset}
+
+{{5~~}Análisis de los datos}
+
+{{5.1~~}Selección de datos a analizar}
+
+{{5.2~~}Comprobación de la normalidad y homogeneidad de la varianza}
+
+{{5.2.1~~}Normalidad}
+
+{{5.2.2~~}Homogeneidad de la varianza}
+
+{{5.3~~}Análisis de correlaciones}
+
+{{5.4~~}Análisis Exploratorio (EDA)}
+
+{{5.4.1~~}Survived}
+
+{{5.4.2~~}Sexo}
+
+{{5.4.3~~}Pclass (Clase)}
+
+{{5.4.4~~}Age}
+
+{{6~~}Conclusiones}
+
+{{7~~}Contribuciones}
+
+    \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{detalles-de-la-actividad}{%
+\section{Detalles de la actividad}\label{detalles-de-la-actividad}}
+
+\hypertarget{descripciuxf3n}{%
+\subsection{Descripción}\label{descripciuxf3n}}
+
+En esta práctica se elabora un caso práctico orientado a aprender a
+identificar los datos relevantes para un proyecto analítico y usar las
+herramientas de integración, limpieza, validación y análisis de las
+mismas.
+
+\hypertarget{objetivos}{%
+\subsection{Objetivos}\label{objetivos}}
+
+Los objetivos de esta práctica son:
+
+\begin{itemize}
+\item
+  Aprender a aplicar los conocimientos adquiridos y su capacidad de
+  resolución de problemas en entornos nuevos o poco conocidos dentro de
+  contextos más amplios o multidisciplinares.
+\item
+  Saber identificar los datos relevantes y los tratamientos necesarios
+  (integración, limpieza y validación) para llevar a cabo un proyecto
+  analítico.
+\item
+  Aprender a analizar los datos adecuadamente para abordar la
+  información contenida en los datos.
+\item
+  Identificar la mejor representación de los resultados para aportar
+  conclusiones sobre el problema planteado en el proceso analítico.
+\item
+  Actuar con los principios éticos y legales relacionados con la
+  manipulación de datos en función del ámbito de aplicación.
+\item
+  Desarrollar las habilidades de aprendizaje que les permitan continuar
+  estudiando de un modo que tendrá que ser en gran medida autodirigido o
+  autónomo.
+\item
+  Desarrollar la capacidad de búsqueda, gestión y uso de información y
+  recursos en el ámbito de la ciencia de datos.
+\end{itemize}
+
+\hypertarget{competencias}{%
+\subsection{Competencias}\label{competencias}}
+
+En esta práctica se desarrollan las siguientes competencias del Máster
+de Data Science:
+
+\begin{itemize}
+\item
+  Capacidad de analizar un problema en el nivel de abstracción adecuado
+  a cada situación y aplicar las habilidades y conocimientos adquiridos
+  para abordarlo y resolverlo.
+\item
+  Capacidad para aplicar las técnicas específicas de tratamiento de
+  datos (integración, transformación, limpieza y validación) para su
+  posterior análisis.
+\end{itemize}
+
+    \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{descripciuxf3n-del-dataset}{%
+\section{Descripción del dataset}\label{descripciuxf3n-del-dataset}}
+
+Para esta práctica se ha escogido el dataset propuesto en el enunciado
+\href{https://www.kaggle.com/c/titanic}{\texttt{Titanic:\ Machine\ Learning\ from\ Disaster}}.
+Este dataset ya viene dividido en dos sets para aplicar modelos de
+Machine Learning, es posible que nos interese juntar ambos en uno para
+aplicar nuestro proceso de limpieza y análisis.
+
+Este dataset proporciona una serie de atributos acerca de los pasajeros
+del Titanic. Estos atributos se suelen utilizar para predecir un
+atributo especial que también se aporta e indica si un pasajero
+sobrevivió o no.
+
+A continuación vemos una lista de los atributos que se incluyen en el
+dataset.
+
+\begin{itemize}
+\tightlist
+\item
+  survival: Identifica si un pasajero sobrevivió o no (valor 1 o 0
+  respectivamente).
+\item
+  pclass: Identifica la clase del ticket que compró el pasajero, hay
+  primera clase (valor 1), segunda (2) y tercera (3).
+\item
+  sex: Sexo del pasajero
+\item
+  Age: Edad del pasajero
+\item
+  sibsp: Número de hermanos/cónyuges a bordo del Titanic
+\item
+  parch: Número de padres/hijos a bordo del Titanic
+\item
+  ticket: Número del ticket del pasajero
+\item
+  cabin: Número de cabina donde el pasajero se alojaba
+\item
+  fare: Tarifa pagada por el pasajero
+\item
+  embarked: Puerto donde embarcó el pasajero
+\end{itemize}
+
+Además, en el repositorio del dataset se especifican los siguientes
+detalles de los datos.
+
+La variable \textbf{pclass} tiene relación con el estatus
+socio-económico. - Primera clase = Clase alta - Segunda clase = Clase
+media - Tercera clase = Clase baja
+
+El atributo \textbf{age} es una fracción si la edad es menor que 1. Si
+la edad es estimada, lo es con el formato xx.5.
+
+Para el atributo \textbf{sibsp} se consideran las relaciones: hermano,
+hermana, hermanastro, hermanastra, esposa y marido (novios y amantes no
+fueron considerados).
+
+En \textbf{parch} se consideran las relaciones: padre, madre, hijo,
+hija, hijastro, hijastra. Algún niño viajó sin niñera así que su parch =
+0.
+
+    \hypertarget{importancia-y-objetivos-del-dataset}{%
+\section{Importancia y objetivos del
+dataset}\label{importancia-y-objetivos-del-dataset}}
+
+Con este dataset se pretende encontrar los atributos que influyen en
+mayor y menor medida a la posibilidad de supervivencia de los pasajeros
+del titanic. Con los resultados se pueden sacar conclusiones acerca de
+la diferencia entre clases, género y edad a la hora de dejar subir a un
+pasajero a las barcas salvavidas, por ejemplo. Así, se puede extraer un
+conexto ideológico de la socidad de la época (1912).
+
+Por otra parte, este dataset es históricamente usado para probar
+diferentes modelos de machine learning y ha servido como primeros pasos
+para todas las personas que se han introducido en este mundo.
+
+    \hypertarget{integraciuxf3n-y-selecciuxf3n-de-los-datos-de-interuxe9s-a-analizar.}{%
+\subsection{Integración y selección de los datos de interés a
+analizar.}\label{integraciuxf3n-y-selecciuxf3n-de-los-datos-de-interuxe9s-a-analizar.}}
+
+A continuación, cargaremos el dataset. Como hemos dicho antes, podríamos
+cargar \emph{train} y \emph{test} y unirlos, pero de momento
+trabajaremos solo con train.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{../data/titanic\PYZus{}in.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Mostramos las 5 primeras filas}
+\PY{n}{df}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   PassengerId  Survived  Pclass  \textbackslash{}
+0            1         0       3
+1            2         1       1
+2            3         1       3
+3            4         1       1
+4            5         0       3
+
+                                                Name     Sex   Age  SibSp  \textbackslash{}
+0                            Braund, Mr. Owen Harris    male  22.0      1
+1  Cumings, Mrs. John Bradley (Florence Briggs Th{\ldots}  female  38.0      1
+2                             Heikkinen, Miss. Laina  female  26.0      0
+3       Futrelle, Mrs. Jacques Heath (Lily May Peel)  female  35.0      1
+4                           Allen, Mr. William Henry    male  35.0      0
+
+   Parch            Ticket     Fare Cabin Embarked
+0      0         A/5 21171   7.2500   NaN        S
+1      0          PC 17599  71.2833   C85        C
+2      0  STON/O2. 3101282   7.9250   NaN        S
+3      0            113803  53.1000  C123        S
+4      0            373450   8.0500   NaN        S
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Vemos como aparecen todos los atributos mencionados. Para nuestro
+análisis realmente no nos interesan los atributos \emph{Cabin},
+\emph{Ticket} y \emph{Name}, así que los descartamos del set (no aportan
+información nueva).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Cabin}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Ticket}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Mostramos las 5 primeras filas}
+\PY{n}{df}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   PassengerId  Survived  Pclass     Sex   Age  SibSp  Parch     Fare Embarked
+0            1         0       3    male  22.0      1      0   7.2500        S
+1            2         1       1  female  38.0      1      0  71.2833        C
+2            3         1       3  female  26.0      0      0   7.9250        S
+3            4         1       1  female  35.0      1      0  53.1000        S
+4            5         0       3    male  35.0      0      0   8.0500        S
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Trabajaremos entonces con este dataset.
+
+    \hypertarget{limpieza-de-los-datos}{%
+\section{Limpieza de los datos}\label{limpieza-de-los-datos}}
+
+Ya importado el dataset podemos proceder a hacer un primer análisis de
+su contenido. A continuación, con el método \emph{info} podemos ver el
+tipo de cada atributo y el número de filas no-nulas.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 891 entries, 0 to 890
+Data columns (total 9 columns):
+ \#   Column       Non-Null Count  Dtype
+---  ------       --------------  -----
+ 0   PassengerId  891 non-null    int64
+ 1   Survived     891 non-null    int64
+ 2   Pclass       891 non-null    int64
+ 3   Sex          891 non-null    object
+ 4   Age          714 non-null    float64
+ 5   SibSp        891 non-null    int64
+ 6   Parch        891 non-null    int64
+ 7   Fare         891 non-null    float64
+ 8   Embarked     889 non-null    object
+dtypes: float64(2), int64(5), object(2)
+memory usage: 62.8+ KB
+    \end{Verbatim}
+
+    Los atirbutos de tipo \emph{objetc} son de tipo \emph{object string}.
+
+    \hypertarget{valores-nulos}{%
+\subsection{Valores nulos}\label{valores-nulos}}
+
+En la tabla anterior, podemos ver que para algunos atributos existen
+valores nulos ya que no hay e mismo número de valores no-nulos para
+todos los atributos. Vamos a comprobar de nuevo esto viendo cuantos
+valroes faltan para cada atributo.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Comprobar numero de nulos}
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+PassengerId      0
+Survived         0
+Pclass           0
+Sex              0
+Age            177
+SibSp            0
+Parch            0
+Fare             0
+Embarked         2
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Como vemos, aparecen dos valores nulos en \emph{Embarked} y 177 en
+\emph{Age}. Hemos decidido eliminar las filas donde \emph{Embarked} es
+null (nos lo podemos permitir al ser tan solo dos). En el caso de la
+variable \emph{Age} se ha decidido utilizar un método de imputación que
+intenta predecir el valor ausente, es el caso del método \emph{nearest
+neighbor imputation} que como su nombre indica utiliza el algoritmo KNN
+para predecir dicho valor. Para realizar esta operación se utiliza la
+función KNNImputer() del paquete \emph{sklearn.impute}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Sustuimos edades con los k vecinos más cercanos}
+\PY{n}{imputer} \PY{o}{=} \PY{n}{KNNImputer}\PY{p}{(}\PY{n}{n\PYZus{}neighbors}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{df}\PY{o}{.}\PY{n}{Age} \PY{o}{=} \PY{n}{imputer}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Eliminamos filas con \PYZsq{}Embarked\PYZsq{} nulo}
+\PY{n}{df}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Comprobar numero de nulos}
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+PassengerId    0
+Survived       0
+Pclass         0
+Sex            0
+Age            0
+SibSp          0
+Parch          0
+Fare           0
+Embarked       0
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Como vemos, ya no tenemos numeros en el dataset.
+
+    \hypertarget{valores-extremos}{%
+\subsection{Valores extremos}\label{valores-extremos}}
+
+Otro estudio típico del ``data cleansing'' es el estudio de los
+\emph{outliers} o valores extremos. Para buscar \emph{outliers} en
+nuestro dataset podemos usar el método \emph{boxplot} excluyendo de la
+representación el atributo \emph{PassengerId} y la variable objetivo
+\emph{Survived}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Gráfico de cajas de los aributos }
+\PY{n}{df}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{boxplot}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x1a05510c850>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_20_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Vemos que aparecen \emph{outliers} en las columnas \emph{Age},
+\emph{SibSp}, \emph{Parch} y \emph{Fare}. Podemos ignorar los
+\emph{outliers} de \emph{SibSp}, \emph{Parch} y \emph{Age} (se decide no
+eliminarlos porque son valores reales y no se quiere prescindir de ellos
+en el modelo) pero deberíamos de tratar los de \emph{Fare}. Para ello,
+basándonos en una
+\href{https://www.kaggle.com/vijaysimhareddyp/titanic-dataset-cleaning-and-prediction\#Importing-all-the-Libraries}{\texttt{propuesta\ de\ kaggle}},
+caparemos los \emph{outliers} con un valor máximo para cada atributo.
+
+Este valor máximo lo definimos de la siguiente manera, usando el rango
+intercuántico (IQR).
+
+\(IQR = Q_3 - Q_1\)
+
+\(Límite\_Superior = Q_{3} + 1.5·IQR\)
+
+Siendo \(Q_3\) el tercer cuartil (cuantil 0.75) y \(Q_1\) el primer
+cuartil (cuantil 0.25).
+
+De este modo los valores que sobrepasen este límite le asignaremos un
+valor constante. Solo creamos un límmite superior porque no consideramos
+que haya \emph{outliers} inferiormente.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Calculamos el IQR para Fare}
+\PY{n}{IQR\PYZus{}Fare} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{Fare}\PY{o}{.}\PY{n}{quantile}\PY{p}{(}\PY{l+m+mf}{0.75}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{df}\PY{o}{.}\PY{n}{Fare}\PY{o}{.}\PY{n}{quantile}\PY{p}{(}\PY{l+m+mf}{0.25}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{IQR de Fare: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{IQR\PYZus{}Fare}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+IQR de Fare: 23.1042
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Calculamos los límites superiores}
+\PY{n}{Lim\PYZus{}Fare} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{Fare}\PY{o}{.}\PY{n}{quantile}\PY{p}{(}\PY{l+m+mf}{0.75}\PY{p}{)} \PY{o}{+} \PY{l+m+mf}{1.5}\PY{o}{*}\PY{n}{IQR\PYZus{}Fare}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Límite para Fare: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{Lim\PYZus{}Fare}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Límite para Fare: 65.6563
+    \end{Verbatim}
+
+    Podemos ver las filas donde se encuentran estos outliers.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{outliers} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{n}{df}\PY{o}{.}\PY{n}{Fare} \PY{o}{\PYZgt{}} \PY{n}{Lim\PYZus{}Fare}\PY{p}{]}
+\PY{c+c1}{\PYZsh{} Cabecera de los outliers}
+\PY{n}{outliers}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+    PassengerId  Survived  Pclass     Sex        Age  SibSp  Parch      Fare  \textbackslash{}
+1             2         1       1  female  38.000000      1      0   71.2833
+27           28         0       1    male  19.000000      3      2  263.0000
+31           32         1       1  female  29.699118      1      0  146.5208
+34           35         0       1    male  28.000000      1      0   82.1708
+52           53         1       1  female  49.000000      1      0   76.7292
+
+   Embarked
+1         C
+27        S
+31        C
+34        C
+52        C
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Cola de los outliers}
+\PY{n}{outliers}\PY{o}{.}\PY{n}{tail}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+     PassengerId  Survived  Pclass     Sex        Age  SibSp  Parch      Fare  \textbackslash{}
+846          847         0       3    male  29.699118      8      2   69.5500
+849          850         1       1  female  29.699118      1      0   89.1042
+856          857         1       1  female  45.000000      1      1  164.8667
+863          864         0       3  female  29.699118      8      2   69.5500
+879          880         1       1  female  56.000000      0      1   83.1583
+
+    Embarked
+846        S
+849        C
+856        S
+863        S
+879        C
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{En total tenemos }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{ outliers}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{outliers}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+En total tenemos 114 outliers
+    \end{Verbatim}
+
+    Una vez calculados los límites podemos proceder a ``capar'' los valores
+que sobrepasen estos limites para las dos columnas.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Capamos con el cuantil 0.85 para Fare}
+\PY{n}{df}\PY{o}{.}\PY{n}{Fare} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{Fare} \PY{o}{\PYZgt{}} \PY{n}{Lim\PYZus{}Fare}\PY{p}{,} \PY{n}{df}\PY{o}{.}\PY{n}{Fare}\PY{o}{.}\PY{n}{quantile}\PY{p}{(}\PY{l+m+mf}{0.85}\PY{p}{)}\PY{p}{,} \PY{n}{df}\PY{o}{.}\PY{n}{Fare}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    En una de las tablas superiores vemos que había un \emph{outlier} de
+Fare para el passenger con \emph{Passengerid} = 2. Si vemos qué valor
+tiene ahora, veremos que el valor a cambiado. En concreto el valor que
+vemos es el cuantil 0.85 de Fare (56.4958).
+
+A continuación mostramos las primera filas donde podemos ver el nuevo
+valor de Fare para este pasajero con \emph{Passengerid} = 2.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   PassengerId  Survived  Pclass     Sex   Age  SibSp  Parch      Fare  \textbackslash{}
+0            1         0       3    male  22.0      1      0   7.25000
+1            2         1       1  female  38.0      1      0  56.37664
+2            3         1       3  female  26.0      0      0   7.92500
+3            4         1       1  female  35.0      1      0  53.10000
+4            5         0       3    male  35.0      0      0   8.05000
+
+  Embarked
+0        S
+1        C
+2        S
+3        S
+4        S
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Si hacemos de nuevo el \emph{boxplot} veremos como han desaparecido
+todos los outliers de \emph{Fare}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{boxplot}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x1a05523efa0>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{dummies-y-guardado-del-dataset}{%
+\subsection{Dummies y guardado del
+dataset}\label{dummies-y-guardado-del-dataset}}
+
+    Tenemos dos atributos que son de tipo \emph{string}, muchos algoritmos
+de análisis precisan que los datos de entrada sean números.
+
+Para las variables categóricas generaremos indicadores dummy que tendrán
+un 1 o 0 indicando si se trata de esa categoría o no. Esto podemos
+hacerlo con la función de \emph{pandas} que se muestra a continuación
+(\emph{get\_dummies}).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Convertimos variables categóricas avariables indicadoras dummy}
+\PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{get\PYZus{}dummies}\PY{p}{(}\PY{n}{df}\PY{p}{)}
+\PY{n}{df}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+     PassengerId  Survived  Pclass        Age  SibSp  Parch      Fare  \textbackslash{}
+0              1         0       3  22.000000      1      0   7.25000
+1              2         1       1  38.000000      1      0  56.37664
+2              3         1       3  26.000000      0      0   7.92500
+3              4         1       1  35.000000      1      0  53.10000
+4              5         0       3  35.000000      0      0   8.05000
+..           {\ldots}       {\ldots}     {\ldots}        {\ldots}    {\ldots}    {\ldots}       {\ldots}
+886          887         0       2  27.000000      0      0  13.00000
+887          888         1       1  19.000000      0      0  30.00000
+888          889         0       3  29.699118      1      2  23.45000
+889          890         1       1  26.000000      0      0  30.00000
+890          891         0       3  32.000000      0      0   7.75000
+
+     Sex\_female  Sex\_male  Embarked\_C  Embarked\_Q  Embarked\_S
+0             0         1           0           0           1
+1             1         0           1           0           0
+2             1         0           0           0           1
+3             1         0           0           0           1
+4             0         1           0           0           1
+..          {\ldots}       {\ldots}         {\ldots}         {\ldots}         {\ldots}
+886           0         1           0           0           1
+887           1         0           0           0           1
+888           1         0           0           0           1
+889           0         1           1           0           0
+890           0         1           0           1           0
+
+[889 rows x 12 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Vemos como se han generado columnas para todas las posibles categorías
+de cada columna (sexo mujer, sexo hombre, embarcado en Q, S o C).
+
+    Como último paso de la limpieza de datos; reordenaremos las columnas a
+nuestro gusto, dejando en la última columna a la variable clase
+(\emph{Survived}).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PassengerId}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pclass}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SibSp}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Parch}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fare}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex\PYZus{}male}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex\PYZus{}female}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Embarked\PYZus{}C}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Embarked\PYZus{}Q}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Embarked\PYZus{}S}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Survived}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+\PY{n}{df}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+     PassengerId  Pclass        Age  SibSp  Parch      Fare  Sex\_male  \textbackslash{}
+0              1       3  22.000000      1      0   7.25000         1
+1              2       1  38.000000      1      0  56.37664         0
+2              3       3  26.000000      0      0   7.92500         0
+3              4       1  35.000000      1      0  53.10000         0
+4              5       3  35.000000      0      0   8.05000         1
+..           {\ldots}     {\ldots}        {\ldots}    {\ldots}    {\ldots}       {\ldots}       {\ldots}
+886          887       2  27.000000      0      0  13.00000         1
+887          888       1  19.000000      0      0  30.00000         0
+888          889       3  29.699118      1      2  23.45000         0
+889          890       1  26.000000      0      0  30.00000         1
+890          891       3  32.000000      0      0   7.75000         1
+
+     Sex\_female  Embarked\_C  Embarked\_Q  Embarked\_S  Survived
+0             0           0           0           1         0
+1             1           1           0           0         1
+2             1           0           0           1         1
+3             1           0           0           1         1
+4             0           0           0           1         0
+..          {\ldots}         {\ldots}         {\ldots}         {\ldots}       {\ldots}
+886           0           0           0           1         0
+887           1           0           0           1         1
+888           1           0           0           1         0
+889           0           1           0           0         1
+890           0           0           1           0         0
+
+[889 rows x 12 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Guardamos el dataset obtenido en un archivo .csv.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{to\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{../data/titanic\PYZus{}out.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{anuxe1lisis-de-los-datos}{%
+\section{Análisis de los datos}\label{anuxe1lisis-de-los-datos}}
+
+    \hypertarget{selecciuxf3n-de-datos-a-analizar}{%
+\subsection{Selección de datos a
+analizar}\label{selecciuxf3n-de-datos-a-analizar}}
+
+En este apartado se seleccionarán los atributos más relevantes para la
+construcción del modelo. Mediante algunas pruebas se determinan cuáles
+de los atributos son innecesarios y cuáles son más influyentes en la
+capacidad predictiva. Entre los posibles beneficios que trae consigo
+este proceso se encuentran los siguinetes:
+
+\begin{itemize}
+\tightlist
+\item
+  Reduce el tiempo de entrenamiento.
+\item
+  Aumenta la precisión en la predicción al contar con menos datos
+  innecesarios (ruido).
+\item
+  Reduce la posibilidad del sobreentrenaiento ( \emph{overfitting}) al
+  contar con menos datos engañosos sobre los que tomar desiciones.
+\end{itemize}
+
+Para realizar esta selección de predictores se utilizará el algoritmo
+llamado Eliminación Recursiva de Variables con \emph{cross validation}
+\href{https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFECV.html\#sklearn.feature_selection.RFECV}{RFECV}.
+Este algoritmo se basa en la evaluación del conjunto de datos en un
+modelo predictivo, asignando un valor de importancia a cada atributo
+según su aportación a la predicción. Inicialmente realiza la evaluación
+de todos los atributos del \emph{dataset} y va disminuyendo la cantidad
+de atributos eliminando los menos importantes hasta que determina un
+valor óptimo de atributos que aportan una capacidad predictiva lo
+suficientemente buena al modelo. En esta variante para obtener la medida
+del rendimiento se utiliza la validación cruzada, y el modelo predictivo
+puede ser elegido arbitrariametne según convenga.
+
+    La primera tarea para implementar el algoritmo es separar la variable
+objetivo de las predictoras, y eliminar de las predictoras el campo
+``PassengerID'', ya que no aporta infomración útil al modelo.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}predictors} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Survived}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PassengerId}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{df\PYZus{}target} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Survived}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Luego es necesario crear la instancia del modelo predictivo que se
+utilizará para calcular el error
+(\href{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html}{\emph{Random
+Forest}}), para posteriormente aplicar el algoritmo. Nótese que es
+necesario establecer algunos parámetros en la invocación de la función
+RFECV, donde además de especificar el modelo es necesario indicar los
+siguientes parámetros:
+
+\begin{itemize}
+\tightlist
+\item
+  step: Número de atributos eliminados en cada iteración.
+\item
+  cv: Hace referencia al tipo de división de los \emph{folds}, en este
+  caso se establece una división estratificada de 10 \emph{folds}.
+\item
+  scoring: Establece la métrica del rendimiento deseada para comprobar
+  la calidad del modelo, en este caso se toma la exactitud (acurancy).
+\item
+  min\_features\_to\_select: Determina la cantidad mínima de atributos.
+\item
+  n\_jobs: Habilita el \emph{multiprocessing}, este algoritmo puede ser
+  computacionalmetne muy pesado y es conveniente utilizar una ayuda
+  extra con varios procesadores. En este caso el dataset no es muy
+  grande y tiene un número bajo de atributos, pero es igualmente
+  interesante tener este factor en cuenta.
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{model} \PY{o}{=} \PY{n}{RandomForestClassifier}\PY{p}{(}\PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{101}\PY{p}{)}
+\PY{n}{rfecv} \PY{o}{=} \PY{n}{RFECV}\PY{p}{(}\PY{n}{estimator}\PY{o}{=}\PY{n}{model}\PY{p}{,}
+              \PY{n}{step}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} 
+              \PY{n}{cv}\PY{o}{=}\PY{n}{StratifiedKFold}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{,} 
+              \PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{accuracy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{n}{n\PYZus{}jobs}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Una vez creada la base del algoritmo, se alimenta con las divisiones
+creadas anteriormente, y utilizando el atributo \emph{n\_features} se
+puede obtener el número óptimo de atributos devuelto automáticamente por
+el algoritmo.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{rfecv}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{df\PYZus{}predictors}\PY{p}{,} \PY{n}{df\PYZus{}target}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Optimal number of features: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{rfecv}\PY{o}{.}\PY{n}{n\PYZus{}features\PYZus{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Optimal number of features: 7
+    \end{Verbatim}
+
+    Como resultado se obtiene que el número óptimo de atributos es 7. Para
+obtener una visión más objetiva de este resultado se ofrece la siguiente
+g eráfican la que se muestra el valor de la exactitud para cada valor
+del número de atributos obtenido.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{16}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Recursive Feature Elimination with Cross\PYZhy{}Validation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{18}\PY{p}{,} \PY{n}{fontweight}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bold}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{pad}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Number of features selected}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{14}\PY{p}{,} \PY{n}{labelpad}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Acurancy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{14}\PY{p}{,} \PY{n}{labelpad}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{rfecv}\PY{o}{.}\PY{n}{grid\PYZus{}scores\PYZus{}}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} \PY{n}{rfecv}\PY{o}{.}\PY{n}{grid\PYZus{}scores\PYZus{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}303F9F}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_51_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    A continuación se imprimen los atributos menos importantes y se crea un
+nuevo \emph{dataframe} con los 7 atributos obtenidos en el análisis
+anterior. La propiedad \emph{support} \_ del objeto rfecv muestra en una
+lista de \emph{booleanos} cuáles de los indices de los atributos entra o
+no entre los 6 más importantes, con el apoyo de esta se realizan las
+tareas anteriormente descritas.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n}{df\PYZus{}predictors}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{rfecv}\PY{o}{.}\PY{n}{support\PYZus{}} \PY{o}{==} \PY{k+kc}{False}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Desechando los atributos menos importantes}
+\PY{n}{df\PYZus{}predictors}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{df\PYZus{}predictors}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{rfecv}\PY{o}{.}\PY{n}{support\PYZus{}} \PY{o}{==} \PY{k+kc}{False}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{df\PYZus{}predictors}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+['Embarked\_C', 'Embarked\_Q', 'Embarked\_S']
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   Pclass   Age  SibSp  Parch      Fare  Sex\_male  Sex\_female
+0       3  22.0      1      0   7.25000         1           0
+1       1  38.0      1      0  56.37664         0           1
+2       3  26.0      0      0   7.92500         0           1
+3       1  35.0      1      0  53.10000         0           1
+4       3  35.0      0      0   8.05000         1           0
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Para finalizar con este apartado es interesante conocer en que medida
+las variables seleccionadas son importantes para el modelo, por ello se
+muestra este valor de importancia obtenido de la propiedad
+\emph{feature\_importances}.
+
+Para facilitar la creación de la gráfica se crea un nuevo
+\emph{dataframe} con los nombres de las columnas y los valores de
+importancia de los atributos, también se ordenan ascendentemente para
+facilitar la comprensión de la misma.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Nuevo dataframe auxiliar para la visualización}
+\PY{n}{dset} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Asignando los vlaores de imoprtancia y nombres de columnas}
+\PY{n}{dset}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attr}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}predictors}\PY{o}{.}\PY{n}{columns}
+\PY{n}{dset}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{importance}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{rfecv}\PY{o}{.}\PY{n}{estimator\PYZus{}}\PY{o}{.}\PY{n}{feature\PYZus{}importances\PYZus{}}
+
+\PY{c+c1}{\PYZsh{} Ordenando por importancia}
+\PY{n}{dset} \PY{o}{=} \PY{n}{dset}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{by}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{importance}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{16}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{barh}\PY{p}{(}\PY{n}{y}\PY{o}{=}\PY{n}{dset}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attr}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{width}\PY{o}{=}\PY{n}{dset}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{importance}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}1976D4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{RFECV \PYZhy{} Feature Importances}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{,} \PY{n}{fontweight}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bold}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{pad}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Importance}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{14}\PY{p}{,} \PY{n}{labelpad}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_55_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{comprobaciuxf3n-de-la-normalidad-y-homogeneidad-de-la-varianza}{%
+\subsection{Comprobación de la normalidad y homogeneidad de la
+varianza}\label{comprobaciuxf3n-de-la-normalidad-y-homogeneidad-de-la-varianza}}
+
+    \hypertarget{normalidad}{%
+\subsubsection{Normalidad}\label{normalidad}}
+
+Para comprobar si los datos tienen una distribución normal podemos
+utilizar el
+\href{https://support.minitab.com/es-mx/minitab/18/help-and-how-to/statistics/basic-statistics/supporting-topics/normality/the-anderson-darling-statistic/}{\emph{\texttt{estadístico\ de\ Anderson-Darling}}}.
+Este estadístico mide qué tan bien siguen los datos una distribución
+específica (gaussiana en nuestro caso).
+
+Aplicando una prueba de contraste de hipótesis se puede comprobar la
+condición de normalidad de los datos. Las hipótesis serán las
+siguientes.
+
+\(H_0\) : Los datos de la muestra sigue una distribución normal.
+
+\(H_1\) : Los datos de la muestra no siguen una disribución normal.
+
+Estableciendo el valor de significancia:
+
+\(\alpha\) en este caso será igual a los valores críticos (para cada
+nivel de significancia )que se obtienen como resultado del test
+\emph{AD}.
+
+Si \(p\) \textless= \(\alpha\) : Se rechaza la hipótesis nula, por lo
+tanto no está distribuida normalmente
+
+Si \(p\) \textgreater{} \(\alpha\) : Se falla al hipótesis nula, por lo
+tanto si está distribuida normalmente
+
+En nuestro caso tenemos tres variables no categóricas sobre las que
+podemos testear la normalidad: \emph{Age}, \emph{SibSp} y \emph{Fare}.
+
+Inicialmente podemos representar sus histogramas para tener una idea de
+si las distribuciones parecen normales o no, esto es, si se aproximan a
+una campana de gauss.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{numpy}\PY{n+nn}{.}\PY{n+nn}{random} \PY{k+kn}{import} \PY{n}{randn}
+
+\PY{c+c1}{\PYZsh{} Distribuciones de las variables no categóricas}
+\PY{n}{fig}\PY{p}{,} \PY{n}{axs} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{14}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Distribución normal de referencia}
+\PY{n}{axs}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{10000}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{100}\PY{p}{)}
+\PY{n}{axs}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Distribución normal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Distribución de atributo Age}
+\PY{n}{axs}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{df\PYZus{}predictors}\PY{o}{.}\PY{n}{Age}\PY{p}{)}
+\PY{n}{axs}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Distribución de Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Distribución de atributo Fare}
+\PY{n}{axs}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{df\PYZus{}predictors}\PY{o}{.}\PY{n}{Fare}\PY{p}{)}
+\PY{n}{axs}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Distribución de Fare}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Distribución de atributo SibSp}
+\PY{n}{axs}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{df\PYZus{}predictors}\PY{o}{.}\PY{n}{SibSp}\PY{p}{)}
+\PY{n}{axs}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Distribución de SibSp}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{fig}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_58_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    De primera ya vemos que si comparamos con la distribución normal de
+referencia (primera figura), ninguna distribución parece acercarse a una
+distribución normal. \emph{Age} parece acercarse algo más que el resto,
+pero aún así se aleja bastante de una normal.
+
+Comprobaremos ahora con el método Anderson-Darling si se pueden
+considerar normales.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k+kn}{import} \PY{n}{anderson}
+
+\PY{c+c1}{\PYZsh{} Comprobación para Age}
+\PY{n}{result} \PY{o}{=} \PY{n}{anderson}\PY{p}{(}\PY{n}{df\PYZus{}predictors}\PY{o}{.}\PY{n}{Age}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Comprobación de la normalidad de Age}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Statistic: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{result}\PY{o}{.}\PY{n}{statistic}\PY{p}{)}
+\PY{n}{p} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{result}\PY{o}{.}\PY{n}{critical\PYZus{}values}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+    \PY{n}{sl}\PY{p}{,} \PY{n}{cv} \PY{o}{=} \PY{n}{result}\PY{o}{.}\PY{n}{significance\PYZus{}level}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{result}\PY{o}{.}\PY{n}{critical\PYZus{}values}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+    \PY{k}{if} \PY{n}{result}\PY{o}{.}\PY{n}{statistic} \PY{o}{\PYZlt{}} \PY{n}{result}\PY{o}{.}\PY{n}{critical\PYZus{}values}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{, los datos siguen una distribución normal}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{sl}\PY{p}{,} \PY{n}{cv}\PY{p}{)}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{, los datos no siguen una distribución normal}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{sl}\PY{p}{,} \PY{n}{cv}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Comprobación de la normalidad de Age
+Statistic: 15.286
+15.000: 0.573, los datos no siguen una distribución normal
+10.000: 0.653, los datos no siguen una distribución normal
+5.000: 0.783, los datos no siguen una distribución normal
+2.500: 0.914, los datos no siguen una distribución normal
+1.000: 1.087, los datos no siguen una distribución normal
+    \end{Verbatim}
+
+    Obtenemos respuestas según lo estrictos que seamos, cuanto mas alto el
+nivel de significancia (1, 205, 5, 10, 15), más estrictos somos y es más
+dificil que la distribución se ajuste a una normal. En este caso, con
+ningún nivel de significancia obtenemos un resultado positivo.
+
+Comprobamos que pasa lo mismo para las otras dos variables y que ninguna
+sigue una distribución normal.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Comprobación para Fare}
+\PY{n}{result} \PY{o}{=} \PY{n}{anderson}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{Fare}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Comprobación de la normalidad de Fare}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Statistic: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{result}\PY{o}{.}\PY{n}{statistic}\PY{p}{)}
+\PY{n}{p} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{result}\PY{o}{.}\PY{n}{critical\PYZus{}values}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+    \PY{n}{sl}\PY{p}{,} \PY{n}{cv} \PY{o}{=} \PY{n}{result}\PY{o}{.}\PY{n}{significance\PYZus{}level}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{result}\PY{o}{.}\PY{n}{critical\PYZus{}values}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+    \PY{k}{if} \PY{n}{result}\PY{o}{.}\PY{n}{statistic} \PY{o}{\PYZlt{}} \PY{n}{result}\PY{o}{.}\PY{n}{critical\PYZus{}values}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{, los datos siguen una distribución normal}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{sl}\PY{p}{,} \PY{n}{cv}\PY{p}{)}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{, los datos no siguen una distribución normal}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{sl}\PY{p}{,} \PY{n}{cv}\PY{p}{)}\PY{p}{)}
+        
+\PY{c+c1}{\PYZsh{} Comprobación para SibSp}
+\PY{n}{result} \PY{o}{=} \PY{n}{anderson}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{SibSp}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Comprobación de la normalidad de SibSp}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Statistic: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{result}\PY{o}{.}\PY{n}{statistic}\PY{p}{)}
+\PY{n}{p} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{result}\PY{o}{.}\PY{n}{critical\PYZus{}values}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+    \PY{n}{sl}\PY{p}{,} \PY{n}{cv} \PY{o}{=} \PY{n}{result}\PY{o}{.}\PY{n}{significance\PYZus{}level}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{result}\PY{o}{.}\PY{n}{critical\PYZus{}values}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+    \PY{k}{if} \PY{n}{result}\PY{o}{.}\PY{n}{statistic} \PY{o}{\PYZlt{}} \PY{n}{result}\PY{o}{.}\PY{n}{critical\PYZus{}values}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{, los datos siguen una distribución normal}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{sl}\PY{p}{,} \PY{n}{cv}\PY{p}{)}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{, los datos no siguen una distribución normal}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{sl}\PY{p}{,} \PY{n}{cv}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Comprobación de la normalidad de Fare
+Statistic: 67.372
+15.000: 0.573, los datos no siguen una distribución normal
+10.000: 0.653, los datos no siguen una distribución normal
+5.000: 0.783, los datos no siguen una distribución normal
+2.500: 0.914, los datos no siguen una distribución normal
+1.000: 1.087, los datos no siguen una distribución normal
+
+Comprobación de la normalidad de SibSp
+Statistic: 146.788
+15.000: 0.573, los datos no siguen una distribución normal
+10.000: 0.653, los datos no siguen una distribución normal
+5.000: 0.783, los datos no siguen una distribución normal
+2.500: 0.914, los datos no siguen una distribución normal
+1.000: 1.087, los datos no siguen una distribución normal
+    \end{Verbatim}
+
+    Como ya habíamos predicho con las ilustraciones de las distribuciones,
+ninguna de ellas cumple con la condición para aceptar la Hipótesis nula
+\(H_0\), con lo que ninguno presenta una distribución normal. Esto en
+general puede ser por diversas causas: Valores extremos (que ya habíamos
+eliminado), superposición de dos procesos de muestreo, insuficiente
+discriminación de datos, muestreo de una población ordenada, valores
+cerca de cero o con un límite natural o simplemente los datos siguen
+otra distribución.
+
+En el titanic realmente había mas de 2000 pasajeros y en nuestro dataset
+tenemos en torno a 900, por lo que no sabemos cómo se hizo realmente la
+toma de los datos y como afecta esto a las distribuciones.
+
+    \hypertarget{homogeneidad-de-la-varianza}{%
+\subsubsection{Homogeneidad de la
+varianza}\label{homogeneidad-de-la-varianza}}
+
+Para comprobar la homgeneidad de la varianza utilizaremos el \emph{test
+de levene}, pero podríamos usar otro entre las distintas opciones.
+
+El \emph{test de Levene} es una prueba estadística que se usa para
+evaluar la igualdad entre las varianzas de dos o más grupos. En este
+caso lo usaremos para ver si la varianza de las variables predictoras
+respecto a la variable objetivo es la misma, a esto es a lo que se le
+llama homogeneidad de la varianza.
+
+De manera similar a la efectuada en la comprobación de la normalidad, se
+aplican pruebas de contraste de hipótesis, estableciendo como \(H_0\) la
+hipótesis que determina que las varianzas son iguales. Es necesario
+destacar que se utilizará el valor de la mediana para determinar la
+centralidad ya que los datos no muestran una distribución normal.
+
+El valor de significancia \(\alpha\) en este caso se establece su valor
+más típico de \(0,05\).
+
+    Para realizar este test se tienen en cuenta los valores de las variables
+predictoras según su distribución en la variable objetivo. Entonces
+utilizando la función \emph{levene()} del paquete scipy.stats se aplica
+dicho test.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k+kn}{import} \PY{n}{levene}
+
+\PY{n}{age} \PY{o}{=} \PY{n}{df\PYZus{}predictors}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{SibSp} \PY{o}{=} \PY{n}{df\PYZus{}predictors}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SibSp}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{Fare} \PY{o}{=} \PY{n}{df\PYZus{}predictors}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fare}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{target} \PY{o}{=} \PY{n}{df\PYZus{}target}
+
+\PY{n}{p\PYZus{}age} \PY{o}{=} \PY{n}{levene}\PY{p}{(}\PY{n}{age}\PY{p}{[}\PY{n}{target}\PY{o}{==}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{age}\PY{p}{[}\PY{n}{target}\PY{o}{==}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{center}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{median}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{pvalue}
+\PY{n}{p\PYZus{}sibsp} \PY{o}{=} \PY{n}{levene}\PY{p}{(}\PY{n}{SibSp}\PY{p}{[}\PY{n}{target}\PY{o}{==}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{SibSp}\PY{p}{[}\PY{n}{target}\PY{o}{==}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{center}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{median}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{pvalue}
+\PY{n}{p\PYZus{}fare} \PY{o}{=} \PY{n}{levene}\PY{p}{(}\PY{n}{Fare}\PY{p}{[}\PY{n}{target}\PY{o}{==}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{Fare}\PY{p}{[}\PY{n}{target}\PY{o}{==}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{center}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{median}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{pvalue}
+
+\PY{n}{p\PYZus{}values} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{p\PYZus{}age} \PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SibSp}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{p\PYZus{}sibsp}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fare}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{p\PYZus{}fare}\PY{p}{\PYZcb{}}
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{p\PYZus{}values}\PY{p}{:}
+    \PY{k}{if} \PY{n}{p\PYZus{}values}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZlt{}} \PY{l+m+mf}{0.05}\PY{p}{:}               
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Los datos de la variable }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{ no presentan Homogeneidad de las varianzas}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Los datos de la variable }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{ presentan Homogeneidad de las varianzas}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)}
+  
+    
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Los datos de la variable Age no presentan Homogeneidad de las varianzas
+Los datos de la variable SibSp presentan Homogeneidad de las varianzas
+Los datos de la variable Fare no presentan Homogeneidad de las varianzas
+    \end{Verbatim}
+
+    Como se aprecia en los resultados del análisis solo la variable
+``SibSp'' presenta homogeneidad en las varianzas. En el caso de la
+variable ``Age'' presenta un p-value cercano al valor de referencia pero
+sigue siendo inferior, esto puede ser por el tratamiento que se le dió a
+los valores extremos o a los ausentes, recordando que esta variable
+tenía la peor completitud entre todas las predictoras.
+
+    Habrá que tener en cuenta las conclusiones sacadas en este apartado a la
+hora de aplicar las diferentes pruebas estadísticas, ya que algunas de
+estas asumen la normalidad y la hocedasticidad en los conjuntos de
+datos.
+
+    \hypertarget{anuxe1lisis-de-correlaciones}{%
+\subsection{Análisis de
+correlaciones}\label{anuxe1lisis-de-correlaciones}}
+
+    En este apartado se comprueba la realción entre las diferentes variables
+predictoras y la variable objetivo, medido en el valor de la
+correlación. La manera más intuitiva de visualizar esta correlación es
+con un mapa de calor, en el que a partir de una matriz de correlaciones
+se muestran en colores los diferentes niveles de valores.
+
+Para crear este mapa se ha utilizado la función \emph{heatmap} del
+paquete \emph{seaborn}. Se han concatenado los \emph{dataframes} de las
+variables predictoras y la objetivo para realizar el cálculo, destacando
+que el método elegido para realizar el mismo es el de ``Spearman'',
+variante no paramétrica utilizada cuando los datos no siguen una
+distribución normal.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+
+\PY{n}{df\PYZus{}heatmap} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{df\PYZus{}predictors}\PY{p}{,} \PY{n}{df\PYZus{}target}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{n}{corr} \PY{o}{=} \PY{n}{df\PYZus{}heatmap}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{n}{method} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{spearman}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{16}\PY{p}{,}\PY{l+m+mi}{16}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{heatmap}\PY{p}{(}\PY{n}{corr}\PY{p}{,}\PY{n}{linewidths}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+            \PY{n}{square}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}  \PY{n}{linecolor}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{white}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{annot}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_71_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Como resultado se obtiene que ninguna variable predictora muestra una
+fuerte correlación con otra variable predictora, lo que determina que no
+hay redundancia en los datos y cada una aporta información útil al
+modelo. También se puede apreciar que algunas variables presentan
+valores muy interesantes sobre la variable objetivo, como es el caso de
+\emph{Pclass}, \emph{Fare} o el sexo, pero esto realmente no dice si es
+estadísticamente significativo a la hora de tomar en cuenta los
+resultados. Para commprobarlo se realiza un test de correlaciones, en el
+que la hipótesis nula es que los datos no están correlacionados y el
+valor de significancia \(\alpha\) es el típico \(0.05\).
+
+Para calcular los valores de p necesarios en el análisis se utiliza la
+función \emph{spearmanr} del paquete \emph{scipy.stats}, y con la ayuda
+de las \emph{list comprehensions} se crean dos listas con los valores de
+los coeficientes de correlación y los \emph{p-values} para
+posteriormente compararlos con el valor de significancia.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k+kn}{import} \PY{n}{spearmanr}
+
+\PY{n}{col\PYZus{}names} \PY{o}{=} \PY{n}{df\PYZus{}predictors}\PY{o}{.}\PY{n}{columns}\PY{o}{.}\PY{n}{values}
+\PY{n}{p\PYZus{}values} \PY{o}{=} \PY{p}{[}\PY{n}{spearmanr}\PY{p}{(}\PY{n}{df\PYZus{}predictors}\PY{p}{[}\PY{n}{col\PYZus{}names}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{df\PYZus{}target}\PY{p}{)}\PY{o}{.}\PY{n}{pvalue} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{col\PYZus{}names}\PY{p}{)}\PY{p}{)}\PY{p}{]}
+\PY{n}{corr\PYZus{}values} \PY{o}{=} \PY{p}{[}\PY{n}{spearmanr}\PY{p}{(}\PY{n}{df\PYZus{}predictors}\PY{p}{[}\PY{n}{col\PYZus{}names}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{df\PYZus{}target}\PY{p}{)}\PY{o}{.}\PY{n}{correlation} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{col\PYZus{}names}\PY{p}{)}\PY{p}{)}\PY{p}{]}
+
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{col\PYZus{}names}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{p\PYZus{}values}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZlt{}} \PY{l+m+mf}{0.05}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{La correlación: }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s+s1}{  con valor p = }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s+s1}{ entre }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{ y la variable objetivo es estadísticamente significativa}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}
+            \PY{n}{corr\PYZus{}values}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{p\PYZus{}values}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{col\PYZus{}names}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{La correlación:  }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s+s1}{ con valor p = }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s+s1}{ entre }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{ y la variable objetivo NO es estadísticamente significativa}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}
+            \PY{n}{corr\PYZus{}values}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{p\PYZus{}values}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{col\PYZus{}names}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+La correlación: -0.34  con valor p = 0.00 entre Pclass y la variable objetivo es
+estadísticamente significativa
+La correlación:  -0.04 con valor p = 0.20 entre Age y la variable objetivo NO es
+estadísticamente significativa
+La correlación: 0.09  con valor p = 0.01 entre SibSp y la variable objetivo es
+estadísticamente significativa
+La correlación: 0.14  con valor p = 0.00 entre Parch y la variable objetivo es
+estadísticamente significativa
+La correlación: 0.32  con valor p = 0.00 entre Fare y la variable objetivo es
+estadísticamente significativa
+La correlación: -0.54  con valor p = 0.00 entre Sex\_male y la variable objetivo
+es estadísticamente significativa
+La correlación: 0.54  con valor p = 0.00 entre Sex\_female y la variable objetivo
+es estadísticamente significativa
+    \end{Verbatim}
+
+    Como se puede observar en los resultados del análisis, la única variable
+que no muestra una significancia estadística en el cálculo de las
+correlaciones es la variable \emph{Age}.
+
+    \hypertarget{anuxe1lisis-exploratorio-eda}{%
+\subsection{Análisis Exploratorio
+(EDA)}\label{anuxe1lisis-exploratorio-eda}}
+
+    Para finalizar con este apartado de análisis de datos se realizará un
+anális exploratorio (EDA). En este, se utilizarán visualizaciones y
+cálculos sencillos para intentar descibrir patrones en los datos que no
+han sido descubiertos por los análisis estadísticos. Para realizar este
+análisis, solamente se utilizarán algunas de las variables obtenidas de
+la selección de atributos. Es cierto que las demás que no fueron
+seleccionadas también pueden aportar conocimiento, pero como estas no se
+toman en consideración para el modelo se toma la desición de no
+utilizarlas en este punto.
+
+    \hypertarget{survived}{%
+\subsubsection{Survived}\label{survived}}
+
+Para comenzar, es interesante conocer la distribución de la variable
+objetivo. En este caso se observa que hay una gran diferencia entre las
+personas sobrevivientes y las que no, representando los sobrevivientes
+solamente un 38.2\%.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{f}\PY{p}{,}\PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{9}\PY{p}{)}\PY{p}{)}
+\PY{n}{df\PYZus{}target}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{pie}\PY{p}{(}\PY{n}{explode}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{]}\PY{p}{,}\PY{n}{autopct}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}1.1f}\PY{l+s+si}{\PYZpc{}\PYZpc{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{shadow}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Distribution of target variable}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{countplot}\PY{p}{(}\PY{n}{df\PYZus{}target}\PY{p}{,}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Count of Survived VS Not Survived Passengers}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_78_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{sexo}{%
+\subsubsection{Sexo}\label{sexo}}
+
+Para analizar la influencia del sexo se utiliza la variable `Sex\_male',
+que denota a los hombres con un 1 y a las mujeres con un 0. Inicialmente
+se realiza una agrupación por sexo y se muestra la realación con la
+variable objetivo.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{df\PYZus{}heatmap}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex\PYZus{}male}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Survived}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Survived}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{count}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Sex\_male  Survived
+0         0            81
+          1           231
+1         0           468
+          1           109
+Name: Survived, dtype: int64
+    \end{Verbatim}
+
+    Como se puede apreciar, de los supervivientes 231 eran mujeres y solo
+109 hombres, teniendo en cuenta que eran muhcos más hombres que mujeres
+este dato indica que la mortalidad entre los hombres fue muy alta.
+
+En las siguientes figuras se muestran estos datos, nótese como se ve una
+calra diferencia entre ambos sexos y los niveles de supervivencia.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Representando gráficas de cantidad y supervivencia por sexo}
+\PY{n}{f}\PY{p}{,}\PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+\PY{n}{df\PYZus{}heatmap}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex\PYZus{}male}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Survived}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex\PYZus{}male}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{count}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Count of passenger Based on  }\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{countplot}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex\PYZus{}male}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{hue}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Survived}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{data}\PY{o}{=}\PY{n}{df\PYZus{}heatmap}\PY{p}{,}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{: Survived vs dead}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+    
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_82_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{pclass-clase}{%
+\subsubsection{Pclass (Clase)}\label{pclass-clase}}
+
+En el caso de esta variable se procede directamente a graficar los
+valores de incidencia sobre la variable objetivo.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{sns}\PY{o}{.}\PY{n}{countplot}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pclass}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{hue}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Survived}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{data}\PY{o}{=}\PY{n}{df\PYZus{}heatmap}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pclass: Sruvived vs Dead}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_84_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Lo más destacable de estos resultados es el valor de los fallecidos en
+la tercera clase y el vaor de los supervivientes en las dos primeras.
+
+    \hypertarget{age}{%
+\subsubsection{Age}\label{age}}
+
+Para analizar la edad se opta por discretizar sus valores agrupándolos
+en 4 segmentos, estos segmentos describen mucho mejor el comportamiento
+de la influencia de las edades a la hora de acceder a los botes
+salvavidas y por ende a la supervivencia. En la gráfica de la izquierda
+se puede apreciar el monto total por grupos, lo que da una idea de
+cuantas personas sobrevivieron por rango de edades.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Discretizando la variable Age}
+\PY{n}{df\PYZus{}heatmap}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age\PYZus{}bin}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{cut}\PY{p}{(}\PY{n}{df\PYZus{}heatmap}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{12}\PY{p}{,}\PY{l+m+mi}{20}\PY{p}{,}\PY{l+m+mi}{40}\PY{p}{,}\PY{l+m+mi}{120}\PY{p}{]}\PY{p}{,} \PY{n}{labels}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Children}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Teenage}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adult}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Elder}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+
+\PY{n}{f}\PY{p}{,}\PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+\PY{n}{df\PYZus{}heatmap}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age\PYZus{}bin}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Survived}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age\PYZus{}bin}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{count}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Count of passenger Based on  }\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{countplot}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age\PYZus{}bin}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{hue}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Survived}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{data}\PY{o}{=}\PY{n}{df\PYZus{}heatmap}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age: Sruvived vs Dead}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_87_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Es evidente que el número de personas fallecidas entre los adultos fue
+muy grande, mientras que entre los niños y los adolescentes presentan
+mejores cifras.
+
+    \hypertarget{conclusiones}{%
+\section{Conclusiones}\label{conclusiones}}
+
+Después de haber realizado los distintos análisis sobre el conjunto de
+datos se puede dar por resuelto el problema planteado inicialmente. Se
+han detectado las variabels con mayor influencia en la variable objetivo
+y se han identificado características de los grupos de personas que
+determinaron en su momento la supervivencia.
+
+Teniendo en cuenta los resultados obtenidos tanto de los análisis
+estadísticos como de los exploratorios se pueden resumir las siguientes
+conclusiones de los datos.
+
+\begin{itemize}
+\tightlist
+\item
+  Las mujeres presentan mejor probabilidad de supervivencia que los
+  hombres.
+\item
+  Proporcionalmente junto con las mujeres los niños y adolescentes
+  presentan mejores porcientos de supervicenvia.
+\item
+  Hay una clara diferencia entre las clases sociales, las personas de
+  primera clase presentan unos datos de supervivencia mucho mejores que
+  las de las demás clases, y si se suman los valores de primera y
+  segunda clase resumen la mayoría de los supervivientes.
+\end{itemize}
+
+    \hypertarget{contribuciones}{%
+\section{Contribuciones}\label{contribuciones}}
+
+\begin{longtable}[]{@{}cc@{}}
+\toprule
+Cotribuciones & Firma\tabularnewline
+\midrule
+\endhead
+Investigación previa & JG, RL\tabularnewline
+Redacción de las respuestas & JG, RL\tabularnewline
+Desarrollo código & JG, RL\tabularnewline
+\bottomrule
+\end{longtable}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
